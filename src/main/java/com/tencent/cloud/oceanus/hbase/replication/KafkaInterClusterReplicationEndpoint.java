@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.client.ClusterConnection;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.KafkaClusterConnection;
+import org.apache.hadoop.hbase.replication.ReplicationPeer;
 import org.apache.hadoop.hbase.replication.regionserver.HBaseInterClusterReplicationEndpoint;
 import org.apache.hadoop.hbase.replication.regionserver.ReplicationSinkManager;
 import org.apache.hadoop.hbase.wal.WAL.Entry;
@@ -93,6 +94,12 @@ public class KafkaInterClusterReplicationEndpoint extends HBaseInterClusterRepli
     public void init(Context context) throws IOException {
         super.init(context);
         // TODO: get kafka configuration, such as boostrap-server and topic-name
+        ReplicationPeer replicationPeer = context.getReplicationPeer();
+        Configuration configuration = replicationPeer.getConfiguration();
+        LOG.info(
+                "Kafka configuration: bootstrap-servers {}, topic {}",
+                configuration.get("bootstrap-servers"),
+                configuration.get("topic"));
     }
 
     @Override
